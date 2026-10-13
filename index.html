@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d1a">
+  <meta name="description" content="আধুনিক সোশ্যাল মিডিয়া ভিডিও ডাউনলোডার।">
+  <title>Video Downloader — All-in-One</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #080d1a;
+      --card: rgba(19, 29, 50, 0.88);
+      --primary: #38bdf8;
+      --secondary: #818cf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.15);
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 22px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      color: var(--text);
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+
+      background:
+        radial-gradient(circle at 10% 10%,
+          rgba(56, 189, 248, 0.12), transparent 35%),
+        radial-gradient(circle at 90% 90%,
+          rgba(129, 140, 248, 0.13), transparent 35%),
+        var(--bg);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 470px;
+      padding: 30px;
+
+      text-align: center;
+
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+
+      animation: fadeUp 0.6s ease;
+    }
+
+    .brand-icon {
+      width: 66px;
+      height: 66px;
+      margin: 0 auto 20px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      color: var(--primary);
+      font-size: 30px;
+
+      background: linear-gradient(
+        135deg,
+        rgba(56, 189, 248, 0.17),
+        rgba(129, 140, 248, 0.17)
+      );
+
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 20px;
+    }
+
+    h1 {
+      font-size: clamp(23px, 5vw, 29px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+
+      background: linear-gradient(
+        110deg,
+        #38bdf8,
+        #818cf8,
+        #c084fc
+      );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .platforms {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 25px;
+    }
+
+    .platform {
+      padding: 7px 10px;
+
+      font-size: 10px;
+      font-weight: 600;
+
+      color: #cbd5e1;
+      background: rgba(148, 163, 184, 0.07);
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .input-wrapper span {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+
+      color: #64748b;
+      font-size: 19px;
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      padding: 15px 14px 15px 43px;
+
+      color: var(--text);
+      background: rgba(8, 13, 26, 0.85);
+
+      border: 1px solid var(--border);
+      border-radius: 12px;
+
+      font-size: 13px;
+      outline: none;
+
+      transition: 0.3s;
+    }
+
+    input::placeholder {
+      color: #64748b;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .main-download-btn {
+      width: 100%;
+      min-height: 49px;
+      padding: 14px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      color: white;
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+
+      font-size: 14px;
+      font-weight: 700;
+
+      box-shadow: 0 5px 18px rgba(2, 132, 199, 0.18);
+    }
+
+    .main-download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.23);
+      filter: brightness(1.1);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    #loader {
+      padding-top: 20px;
+    }
+
+    .loader {
+      width: 38px;
+      height: 38px;
+      margin: 0 auto 13px;
+
+      border: 3px solid rgba(148, 163, 184, 0.15);
+      border-top: 3px solid var(--primary);
+      border-right: 3px solid var(--secondary);
+      border-radius: 50%;
+
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-text {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    #status-message {
+      margin: 16px 0 0;
+      padding: 12px;
+
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.08);
+
+      border: 1px solid rgba(245, 158, 11, 0.18);
+      border-radius: 10px;
+
+      font-size: 12px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .result-box {
+      margin-top: 22px;
+      padding: 16px;
+
+      text-align: left;
+
+      background: rgba(8, 13, 26, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+
+      animation: fadeUp 0.4s ease;
+    }
+
+    .result-box img {
+      display: block;
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+
+      margin-bottom: 15px;
+
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .result-box h3 {
+      margin-bottom: 15px;
+
+      color: #e2e8f0;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.8;
+
+      overflow-wrap: anywhere;
+    }
+
+    #file-download-link {
+      display: block;
+      text-decoration: none;
+    }
+
+    .dl-button {
+      width: 100%;
+      padding: 14px;
+
+      color: white;
+      background: linear-gradient(135deg, #16a34a, #059669);
+
+      border: none;
+      border-radius: 12px;
+
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .dl-button:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.2);
+    }
+
+    .notice {
+      margin-top: 24px;
+      padding-top: 17px;
+
+      border-top: 1px solid var(--border);
+
+      color: #64748b;
+      font-size: 11px;
+      line-height: 1.9;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 14px;
+      }
+
+      .container {
+        padding: 24px 18px;
+        border-radius: 20px;
+      }
+
+      .brand-icon {
+        width: 58px;
+        height: 58px;
+        font-size: 26px;
+        border-radius: 17px;
+        margin-bottom: 17px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+      }
+
+      .platforms {
+        gap: 6px;
+      }
+
+      .result-box {
+        padding: 13px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <div class="brand-icon" aria-hidden="true">⇩</div>
+
+    <h1>Video Downloader</h1>
+
+    <p class="subtitle">
+      তোমার পছন্দের ভিডিওর লিংক পেস্ট করো এবং উপলভ্য ডাউনলোড অপশন দেখো।
+    </p>
+
+    <div class="platforms">
+      <span class="platform">YouTube</span>
+      <span class="platform">Facebook</span>
+      <span class="platform">Instagram</span>
+      <span class="platform">TikTok</span>
+    </div>
+
+    <form id="download-form">
+
+      <div class="input-wrapper">
+        <span aria-hidden="true">↗</span>
+
+        <input
+          type="url"
+          id="video-url"
+          placeholder="ভিডিওর লিংক এখানে পেস্ট করো..."
+          aria-label="ভিডিওর লিংক"
+          autocomplete="url"
+          required
+        >
+      </div>
+
+      <button type="submit" id="download-btn" class="main-download-btn">
+        <span>⇩</span>
+        <span>ভিডিও ডাউনলোড করুন</span>
+      </button>
+
+    </form>
+
+    <div id="loader" style="display:none;" role="status" aria-live="polite">
+      <div class="loader"></div>
+      <p class="loading-text">ভিডিওর তথ্য খোঁজা হচ্ছে...</p>
+    </div>
+
+    <p id="status-message" role="status" aria-live="polite" style="display:none;"></p>
+
+    <section id="result-box" class="result-box" style="display:none;">
+
+      <img id="thumb-img" src="" alt="ভিডিওর প্রিভিউ">
+
+      <h3 id="video-title"></h3>
+
+      <a
+        id="file-download-link"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <button type="button" class="dl-button">
+          MP4 ডাউনলোড করুন
+        </button>
+      </a>
+
+    </section>
+
+    <footer class="notice">
+      অনুমতিপ্রাপ্ত ভিডিও ডাউনলোড করো এবং সংশ্লিষ্ট প্ল্যাটফর্মের নিয়ম মেনে চলো।
+      <br>
+      ডাউনলোড সুবিধা API-এর প্রাপ্যতা ও সমর্থনের ওপর নির্ভরশীল।
+    </footer>
+
+  </main>
+
+  <script>
+    /*
+      নিরাপত্তা:
+      RapidAPI Key সরাসরি HTML-এ রাখলে অন্যরা সেটি দেখতে পারবে।
+      প্রোডাকশন ব্যবহারের জন্য ব্যাকএন্ডে API Key রাখো।
+    */
+
+    const API_KEY = "afbd1bb1demshb27e29f3fb62dfap13e7bbjsnecbf10c7a8a6";
+    const API_HOST = "social-media-video-downloader.p.rapidapi.com";
+
+    const form = document.getElementById("download-form");
+    const urlInput = document.getElementById("video-url");
+    const downloadBtn = document.getElementById("download-btn");
+    const loader = document.getElementById("loader");
+    const resultBox = document.getElementById("result-box");
+    const thumbImg = document.getElementById("thumb-img");
+    const videoTitle = document.getElementById("video-title");
+    const fileDownloadLink = document.getElementById("file-download-link");
+    const statusMessage = document.getElementById("status-message");
+
+    function showMessage(message) {
+      statusMessage.textContent = message;
+      statusMessage.style.display = "block";
+    }
+
+    function hideMessage() {
+      statusMessage.textContent = "";
+      statusMessage.style.display = "none";
+    }
+
+    function isValidHttpUrl(value) {
+      try {
+        const parsed = new URL(value);
+        return parsed.protocol === "https:" || parsed.protocol === "http:";
+      } catch {
+        return false;
+      }
+    }
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const videoUrl = urlInput.value.trim();
+
+      if (!videoUrl || !isValidHttpUrl(videoUrl)) {
+        showMessage("দয়া করে একটি সঠিক ভিডিও লিংক দিন।");
+        return;
+      }
+
+      if (API_KEY === "YOUR_RAPIDAPI_KEY") {
+        showMessage(
+          "API Key সেট করা হয়নি। কোডের নিরাপত্তা নির্দেশনা অনুসরণ করে API সংযোগ কনফিগার করো।"
+        );
+        return;
+      }
+
+      hideMessage();
+      resultBox.style.display = "none";
+      loader.style.display = "block";
+      downloadBtn.disabled = true;
+
+      try {
+        const endpoint =
+          `https://${API_HOST}/smvd/get/all?url=${encodeURIComponent(videoUrl)}`;
+
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: {
+            "x-rapidapi-key": API_KEY,
+            "x-rapidapi-host": API_HOST
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            response.status === 429
+              ? "API ব্যবহারের সীমা শেষ হয়েছে। পরে আবার চেষ্টা করো।"
+              : `API অনুরোধ ব্যর্থ হয়েছে (HTTP ${response.status})।`
+          );
+        }
+
+        const data = await response.json();
+
+        if (!data || !Array.isArray(data.links) || data.links.length === 0) {
+          throw new Error(
+            "ভিডিও ডাউনলোডের লিংক পাওয়া যায়নি। লিংকটি যাচাই করো অথবা অন্য ভিডিও চেষ্টা করো।"
+          );
+        }
+
+        const firstLink = data.links.find(
+          item => item && typeof item.link === "string"
+        );
+
+        if (!firstLink) {
+          throw new Error("API থেকে বৈধ ডাউনলোড লিংক পাওয়া যায়নি।");
+        }
+
+        const downloadUrl = new URL(firstLink.link);
+
+        if (!["http:", "https:"].includes(downloadUrl.protocol)) {
+          throw new Error("API একটি গ্রহণযোগ্য ডাউনলোড লিংক দেয়নি।");
+        }
+
+        thumbImg.style.display = "none";
+        thumbImg.removeAttribute("src");
+
+        if (typeof data.picture === "string" && data.picture) {
+          try {
+            const pictureUrl = new URL(data.picture);
+
+            if (["http:", "https:"].includes(pictureUrl.protocol)) {
+              thumbImg.src = pictureUrl.href;
+              thumbImg.style.display = "block";
+              thumbImg.onerror = function() {
+                this.style.display = "none";
+              };
+            }
+          } catch {
+            // অবৈধ প্রিভিউ URL হলে ছবি দেখানো হবে না।
+          }
+        }
+
+        videoTitle.textContent = data.title || "ভিডিও ডাউনলোডের জন্য প্রস্তুত";
+        fileDownloadLink.href = downloadUrl.href;
+
+        resultBox.style.display = "block";
+
+      } catch (error) {
+        console.error("Video downloader error:", error);
+
+        showMessage(
+          error.message ||
+          "কোনো সমস্যা হয়েছে। ইন্টারনেট সংযোগ ও ভিডিও লিংক যাচাই করে আবার চেষ্টা করো।"
+        );
+
+      } finally {
+        loader.style.display = "none";
+        downloadBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+  </html>
